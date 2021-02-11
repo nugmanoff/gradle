@@ -13,20 +13,22 @@ plugins {
 
 val aetherVersion = "1.13.1"
 val antVersion = "1.10.9"
-val archunitVersion = "0.11.0"
-val asmVersion = "7.3.1"
-val awsS3Version = "1.11.633"
-val bouncycastleVersion = "1.64"
-val googleApiVersion = "1.25.0"
-val jacksonVersion = "2.10.2"
-val jettyVersion = "9.4.31.v20200723"
+val archunitVersion = "0.16.0"
+val asmVersion = "9.1"
+val awsS3Version = "1.11.948"
+val bouncycastleVersion = "1.68"
+val googleApiVersion = "1.25.0" // See usage before attempting to upgrade
+val jacksonVersion = "2.12.1"
+val jettyVersion = "9.4.36.v20210114"
 val mavenVersion = "3.0.5"
 val mavenWagonVersion = "3.0.0"
 val nativePlatformVersion = "0.22-milestone-10"
 val pmavenVersion = "0.8-20100325"
-val slf4jVersion = "1.7.28"
+val slf4jVersion = "1.7.30"
 val sshdVersion = "2.0.0"
 val tomljVersion = "1.0.0"
+
+val bytebuddyVersion = "1.10.20"
 
 dependencies {
     constraints {
@@ -48,20 +50,21 @@ dependencies {
         api(libs.awsS3S3)               { version { strictly(awsS3Version) }}
         api(libs.awsS3Sts)              { version { strictly(awsS3Version) }}
         api(libs.bouncycastlePgp)       { version { strictly(bouncycastleVersion) }}
+        api(libs.bouncycastlePkix)       { version { strictly(bouncycastleVersion) }}
         api(libs.bouncycastleProvider)  { version { strictly(bouncycastleVersion) }}
         api(libs.bsh)                   { version { strictly("2.0b6") }}
-        api(libs.commonsCodec)          { version { strictly("1.13") }}
-        api(libs.commonsCompress)       { version { strictly("1.19") }}
-        api(libs.commonsHttpclient)     { version { strictly("4.5.10") }}
-        api(libs.commonsIo)             { version { strictly("2.6") }}
+        api(libs.commonsCodec)          { version { strictly("1.15") }}
+        api(libs.commonsCompress)       { version { strictly("1.20") }}
+        api(libs.commonsHttpclient)     { version { strictly("4.5.13") }}
+        api(libs.commonsIo)             { version { strictly("2.8.0") }}
         api(libs.commonsLang)           { version { strictly("2.6") }}
         api(libs.commonsMath)           { version { strictly("3.6.1") }}
-        api(libs.fastutil)              { version { strictly("8.3.0") }}
-        api(libs.gcs)                   { version { strictly("v1-rev136-1.25.0") }}
-        api(libs.googleApiClient)       { version { strictly(googleApiVersion) }}
-        api(libs.googleHttpClient)      { version { strictly(googleApiVersion) }}
-        api(libs.googleHttpClientJackson2) { version { strictly(googleApiVersion) }}
-        api(libs.googleOauthClient)     { version { strictly(googleApiVersion) }}
+        api(libs.fastutil)              { version { strictly("8.5.2") }}
+        api(libs.gcs)                   { version { strictly("v1-rev171-1.25.0") }}
+        api(libs.googleApiClient)       { version { strictly(googleApiVersion); because("our GCS version requires 1.25.0") }}
+        api(libs.googleHttpClient)      { version { strictly(googleApiVersion); because("our GCS version requires 1.25.0") }}
+        api(libs.googleHttpClientJackson2) { version { strictly(googleApiVersion); because("our GCS version requires 1.25.0") }}
+        api(libs.googleOauthClient)     { version { strictly(googleApiVersion); because("our GCS version requires 1.25.0") }}
         api(libs.gradleProfiler)        { version { strictly("0.15.0") }}
         api(libs.groovy)                { version { strictly("1.3-${libs.groovyVersion}"); because("emulating the Groovy 2.4-style groovy-all.jar, see https://github.com/gradle/gradle-groovy-all") }}
         api(libs.gson)                  { version { strictly("2.8.5") }}
@@ -137,7 +140,8 @@ dependencies {
         api(libs.archunit)              { version { strictly(archunitVersion) }}
         api(libs.archunitJunit4)        { version { strictly(archunitVersion) }}
         api(libs.awaitility)            { version { strictly("3.1.6") }}
-        api(libs.bytebuddy)             { version { strictly("1.8.21") }}
+        api(libs.bytebuddy)             { version { strictly(bytebuddyVersion) }}
+        api(libs.bytebuddyAgent)             { version { strictly(bytebuddyVersion) }}
         api(libs.cglib)                 { version { strictly("3.2.6") }}
         api(libs.equalsverifier)        { version { strictly("2.1.6") }}
         api(libs.flightrecorder)        { version { strictly("7.0.0-alpha01") }}
@@ -154,8 +158,9 @@ dependencies {
         api(libs.kotlinCoroutinesDebug) { version { strictly("1.4.1") }}
         api(libs.littleproxy)           { version { strictly("1.1.3"); because("latest officially released version is incompatible with Guava >= 20") }}
         api(libs.mina)                  { version { strictly("2.0.17") }}
+        api(libs.mockitoCore)           { version { strictly("3.7.7") }}
         api(libs.mockitoKotlin)         { version { strictly("1.6.0") }}
-        api(libs.mockitoKotlin2)        { version { strictly("2.1.0") }}
+        api(libs.mockitoKotlin2)        { version { strictly("2.2.0") }}
         api(libs.mySqlConnector)        { version { strictly("8.0.17") }}
         api(libs.sampleCheck)           { version { strictly("0.12.6") }}
         api(libs.snappy)                { version { strictly("0.4") }}
