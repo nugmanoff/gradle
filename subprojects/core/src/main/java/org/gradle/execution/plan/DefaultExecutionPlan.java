@@ -685,15 +685,29 @@ public class DefaultExecutionPlan implements ExecutionPlan {
             return false;
         }
         Set<String> candidateNodeOutputs = mutations.outputPaths;
-        Set<String> candidateMutationPaths = !candidateNodeOutputs.isEmpty()
-            ? candidateNodeOutputs
-            : mutations.destroyablePaths;
-        if (!candidateMutationPaths.isEmpty()) {
-            for (Node runningNode : runningNodes) {
-                MutationInfo runningMutations = runningNode.getMutationInfo();
-                Iterable<String> runningMutationPaths = Iterables.concat(runningMutations.outputPaths, runningMutations.destroyablePaths);
-                if (hasOverlap(candidateMutationPaths, runningMutationPaths)) {
+        if (candidateNodeOutputs.isEmpty()) {
+            Set<String> destroyablePaths = mutations.destroyablePaths;
+            if (!destroyablePaths.isEmpty()) {
+                for (Node runningNode : runningNodes) {
+                    MutationInfo runningMutations = runningNode.getMutationInfo();
+                    Iterable<String> runningMutationPaths = Iterables.concat(runningMutations.outputPaths, runningMutations.destroyablePaths);
+                    if (hasOverlap(destroyablePaths, runningMutationPaths)) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            for (String nodeOutput : candidateNodeOutputs) {
+                if (outputHierarchy.getNodesAccessing(nodeOutput).stream().anyMatch(runningNodes::contains)) {
                     return true;
+                }
+                for (Node runningNode : runningNodes) {
+                    MutationInfo runningMutations = runningNode.getMutationInfo();
+                    if (!runningMutations.destroyablePaths.isEmpty()) {
+                        if (hasOverlap(runningMutations.destroyablePaths, candidateNodeOutputs)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
